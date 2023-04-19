@@ -42,7 +42,7 @@ Features include:
     + Monitor parallel queries               
     + Check Underscore parameter             
     + View Xplain Plan for sql_id            
-    + View SQL Execution Plan History (planc)
+    + View SQL Execution Plan History (planc)           
     + Generate AWR/ADDM/ASH Reports 
                
 
