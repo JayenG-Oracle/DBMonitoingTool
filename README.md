@@ -9,14 +9,13 @@ Before first time use of this scripts create "Reports" directory in DBMonitoingT
    - AWR_DIFF
    - AWR_DIFF_GLOBAL
    - SQLRPT
-* The Folder name is case sensitive. 
+ The Folder name is case sensitive. 
    
  How To Use:                                                             
  ***********   
  sh DBMonitorMain.sh                                                  
                                                                          
- FEATURES:                                                               
- ********                                                                
+ FEATURES:                                                                                                                             
    1 - Host Overview                                                      
 		> Host details                                                    
 		> CPU , Memory & File system  details		                      
