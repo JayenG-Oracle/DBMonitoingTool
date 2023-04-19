@@ -1,4 +1,4 @@
-This repository contains a set of shell scripts that provide menu-driven SQL scripts for monitoring daily DBA activities on Oracle databases version 12c and above, including multitenant databases.
+This repository contains a set of shell scripts that provide menu-driven SQL options for monitoring daily DBA activities on Oracle databases version 12c and above, including multitenant databases.
 
 Before using the scripts for the first time, create a "Reports" directory in the DBMonitoringTool directory and the following sub-directories inside the Reports directory for database reports: ADDM, ASH, AWR, AWR_GLOBAL, AWR_DIFF, AWR_DIFF_GLOBAL, and SQLRPT. Please note that the directory names are case sensitive.
 
