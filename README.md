@@ -1,8 +1,19 @@
 This shell scripts provides menu driven SQL scripts to monitoring day to day DBA activity.                               
 It will simplify the way you manage your oracle database (12c & Above).  
-                                                                         
+                                                                       
+Before first time use of this scripts create Reports directory and its sub  directories in DBMonitoingTool directory to save the database reports. 
+Folder name is case sensitive, create directory as it is)
+ Reports
+   - ADDM
+   - ASH
+   - AWR
+   - AWR_GLOBAL
+   - AWR_DIFF
+   - AWR_DIFF_GLOBAL
+   - SQLRPT
+   
  How To Use:                                                             
- ***********                                                                                        
+ ***********   
  sh DBMonitorMain.sh                                                  
                                                                          
  FEATURES:                                                               
