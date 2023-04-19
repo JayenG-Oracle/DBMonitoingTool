@@ -1,0 +1,143 @@
+# Program: oraset
+# Script for setting the oracle context based on /etc/oratab
+# and /usr/local/bin/oraenv
+#
+# Parameters
+#  -m Display a menu
+#  -l List content of oratab
+#
+# Specify TNSDIR if SQL*Net files like tnsnames.ora,sqlnet.ora
+# at common location. Otherwise keep it empty
+TNSDIR=
+# Parse commandline
+OPTIND=1 # Reset getopts
+menu=n; long=n
+while getopts "ml" opt ; do
+  case "$opt" in
+    m) menu=y;;
+    l) long=y;;
+  esac
+done
+shift $((OPTIND-1)) #
+#
+# Check if menu is requested
+#
+if [ $menu == y ]
+then
+  echo -e "\n====================================================="
+  echo  "Select Database"
+  echo  "====================================================="
+  DBS="$(grep "^[a-z,A-Z,+]" /etc/oratab|awk -F: '{printf "%s:%s\n",$1,$2}'|sort) Cancel"
+  COLUMNS=20
+  PS3="Enter your choice:  "
+  select db in $DBS
+  do
+    case $db in
+      "Cancel")
+                break;;
+            "") echo "Invalid choice, try again." ;;
+             *) SID=$(cut -d: -f1 <<< $db)
+                break;;
+    esac
+  done
+  echo -e "\nDatabase choosen: $SID"
+else
+  SID=$1
+fi
+if [ "${SID}" = "" ]
+then
+  echo "oraset: Give database instance as parameter"
+  echo "Valid instances are:"
+  if [ $long == y ] ; then
+    grep "^[a-z,A-Z,+]" /etc/oratab|awk -F: '{printf "%-18s %s\n",$1,$2}'|sort
+  else
+    echo `grep "^[a-z,A-Z,+]" /etc/oratab|awk -F: '{print $1}'|sort`
+  fi
+else
+  if [ `grep -c "^${SID}:" /etc/oratab` -eq 0 ] ; then
+     echo "oraset: Instance $SID not in /etc/oratab!"
+     echo "Valid instances are:"
+    if [ $long == y ] ; then
+      grep "^[a-z,A-Z,+]" /etc/oratab|awk -F: '{printf "%-18s %s\n",$1,$2}'|sort
+    else
+      echo `grep "^[a-z,A-Z,+]" /etc/oratab|awk -F: '{print $1}'|sort`
+    fi
+  else
+    ORAPATH="$ORACLE_HOME/opmn/bin $ORACLE_HOME/dcm/bin $ORACLE_HOME/OPatch $ORACLE_HOME/OMSPatcher"
+    #cleanup PATH
+    for i in $ORAPATH
+    do
+      case "$PATH" in
+        *$i*) PATH=`echo $PATH | sed "s#$i##g;s#::#:#g"` ;;
+        *) ;;
+      esac
+    done
+    export PATH
+    #cleanup TNS_ADMIN
+    unset TNS_ADMIN
+    # Check if <OH>/install/eminstall.info exists, then it is a Cloud Control Home
+    OHOME=`grep "^${SID}:" /etc/oratab|awk -F: '{print $2}'`
+    if [ -f "${OHOME}/install/eminstall.info" ]
+    then
+      if [ "${ORACLE_HOME}" != "" ]
+      then
+        case "$PATH" in
+          *${ORACLE_HOME}/bin*) PATH=`echo $PATH | sed "s#${ORACLE_HOME}/bin##g;s#::#:#g"` ;;
+          *) ;;
+        esac
+      fi
+      export PATH
+      export ORACLE_SID=${SID}
+      export ORACLE_HOME=$OHOME
+      export PATH=$PATH:$ORACLE_HOME/bin
+    else
+      ORAENV_ASK=NO
+      ORAENV_SILENT=TRUE
+      export ORACLE_SID=$SID
+      . /usr/local/bin/oraenv
+      unset ORAENV_ASK
+      unset ORAENV_SILENT
+      # Set ORACLE_UNQNAME= for TDE
+      export ORACLE_UNQNAME=$ORACLE_SID
+      # Set TNS_ADMIN
+      if [ "${TNSDIR}" != "" ]
+      then
+        export TNS_ADMIN=$TNSDIR
+          else
+        export TNS_ADMIN=${ORACLE_HOME}/network/admin
+      fi
+      # Check if it is a RAC and if so get the instance name
+      INF=$(srvctl config database -db ${ORACLE_SID} |grep "^Database instance.*: \|^Configured nodes: ")
+      if [ $(grep -c "Database instance.*: " <<<"$INF") -gt 0 ]
+      then
+        set $INF
+        HOSTARR=(${6//,/ })
+        INSTARR=(${3//,/ })
+        for i in "${!HOSTARR[@]}"
+        do
+          if [ "${HOSTARR[i]}" == "$(hostname -s)" ]
+          then
+            export ORACLE_SID=${INSTARR[i]}
+            break
+          fi
+        done
+      fi
+    fi
+    export OH=$ORACLE_HOME
+    # Add additional directories to PATH
+    ORAPATH="$ORACLE_HOME/opmn/bin $ORACLE_HOME/dcm/bin $ORACLE_HOME/OPatch $ORACLE_HOME/OMSPatcher"
+    for i in $ORAPATH
+    do
+      if [ -d $i ]
+      then
+        case "$PATH" in
+          *$i*) ;;
+          *) PATH=$PATH:$i ;;
+        esac
+      fi
+    done
+    # Remove ::
+    PATH=`echo $PATH | sed "s#::#:#g"`
+    export PATH
+  fi
+fi
