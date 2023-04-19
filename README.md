@@ -2,6 +2,7 @@ This shell scripts provides menu driven SQL scripts to monitor day to day DBA ac
 It will simplify the way you manage your oracle database (12c & Above multitenant).  
                                                                        
 Before first time use of this scripts create "Reports" directory in DBMonitoingTool. Create below sub directories inside Reports directory for the database reports. 
+The Folder names are case sensitive.
    - ADDM
    - ASH
    - AWR
@@ -9,7 +10,6 @@ Before first time use of this scripts create "Reports" directory in DBMonitoingT
    - AWR_DIFF
    - AWR_DIFF_GLOBAL
    - SQLRPT
- + The Folder name is case sensitive. 
    
  How To Use:                                                             
  ++++++++++++++++++++++++++++++  
