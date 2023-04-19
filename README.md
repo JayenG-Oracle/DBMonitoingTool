@@ -1,5 +1,5 @@
-This shell scripts provides menu driven SQL scripts to monitoring day to day DBA activity.                               
-It will simplify the way you manage your oracle database (12c & Above).  
+This shell scripts provides menu driven SQL scripts to monitor day to day DBA activity.                               
+It will simplify the way you manage your oracle database (12c & Above multitenant).  
                                                                        
 Before first time use of this scripts create Reports directory and its sub  directories in DBMonitoingTool directory to save the database reports. 
 Folder name is case sensitive, create directory as it is)
