@@ -3,6 +3,7 @@ This repository contains a set of shell scripts that provide menu-driven SQL scr
 Before using the scripts for the first time, create a "Reports" directory in the DBMonitoringTool directory and the following sub-directories inside the Reports directory for database reports: ADDM, ASH, AWR, AWR_GLOBAL, AWR_DIFF, AWR_DIFF_GLOBAL, and SQLRPT. Please note that the directory names are case sensitive.
 
 To use the scripts, run the following command:
+
 sh DBMonitorMain.sh
 
 Features include:
