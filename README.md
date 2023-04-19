@@ -12,7 +12,7 @@ Before first time use of this scripts create "Reports" directory in DBMonitoingT
  The Folder name is case sensitive. 
    
  How To Use:                                                             
- ***********   
+ ++++++++++++++++++++++++++++++  
  sh DBMonitorMain.sh                                                  
                                                                          
  FEATURES:                                                                                                                             
