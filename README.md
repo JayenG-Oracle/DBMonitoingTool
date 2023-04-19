@@ -3,6 +3,7 @@ It will simplify the way you manage your oracle database (12c & Above multitenan
                                                                        
 Before first time use of this scripts create Reports directory and its sub  directories in DBMonitoingTool directory to save the database reports. 
 Folder name is case sensitive, create directory as it is)
+ 
  Reports
    - ADDM
    - ASH
